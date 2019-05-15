@@ -11,9 +11,16 @@
   #canvas {
     background-color:#000;
   }
+  #controls {
+    display:block;
+  }
 </style>
 <body>
   <canvas id="canvas" width="800" height="800"></canvas>
+  <div id="controls">
+    <label for="inputDrawWalls">Always draw walls</label>
+    <input type="checkbox" id="inputDrawWalls" name="inputDrawWalls" checked>
+  </div>
   <script src="canvas.js"></script>
   <script src="lineMaths.js"></script>
   <script src="rayMaths.js"></script>

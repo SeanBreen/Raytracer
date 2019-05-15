@@ -1,4 +1,5 @@
 var canvas = document.getElementById("canvas");
+var inputDrawWalls = document.getElementById("inputDrawWalls");
 var ctx = canvas.getContext("2d");
 var width = canvas.width;
 var height = canvas.height;
@@ -18,6 +19,10 @@ canvas.addEventListener("mouseup", function(ev) {
 
 canvas.addEventListener("mousemove", function(ev) {
   mouse = [ev.clientX,ev.clientY];
+});
+
+inputDrawWalls.addEventListener("input", function() {
+  drawWalls = !drawWalls;
 });
 
 function clearScreen() {
@@ -60,8 +65,6 @@ function drawRays() {
   for (i=0;i<360;i+=1) {
     rayEndPoint = getRayEnd(center, rayLength, i);
     a = [center,rayEndPoint];
-    ctx.beginPath();
-    ctx.moveTo(a[0][0], a[0][1]);
     var rayQueue = [0,0,100000000];
     for (j=0;j<lines.length;j++) {
       var hitPoints = 0;
@@ -75,14 +78,22 @@ function drawRays() {
           var tLength = pythagorus(mouse[0], mouse[1], interceptPoint[0], interceptPoint[1]);
           if (tLength < rayQueue[2]) {
             rayQueue = [interceptPoint[0], interceptPoint[1], tLength];
+            ctx.fillStyle="#fff";
+
           }
         }
       }
     }
     if (rayQueue[0] == 0 && rayQueue[1] == 0) {
       rayQueue = [rayEndPoint[0], rayEndPoint[1]];
+    } else {
+      if (!drawWalls && rayQueue[2] <= 270) {
+        ctx.fillRect(rayQueue[0]-2, rayQueue[1]-2, 4,4);
+      }
     }
 
+    ctx.beginPath();
+    ctx.moveTo(a[0][0], a[0][1]);
     ctx.lineTo(rayQueue[0], rayQueue[1]);
     ctx.save();
     ctx.translate(mouse[0],mouse[1]);
@@ -96,6 +107,7 @@ function drawRays() {
     ctx.restore();
     ctx.lineWidth = 1;
 
+
   }
 }
 
@@ -103,6 +115,9 @@ function draw() {
   clearScreen();
   updateCenter();
   drawRays();
-  drawWorld();
+  if (drawWalls) {
+    drawWorld();
+  }
+
   drawDrawingLine();
 }

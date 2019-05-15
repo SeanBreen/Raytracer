@@ -1,5 +1,6 @@
 var center = [300,370];
 var rayLength = 300;
+var drawWalls = true;
 var drawing = false;
 var drawingLine = [];
 
